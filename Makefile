@@ -48,7 +48,7 @@ lint-fix:
 	@echo ">> fixing goimports"
 	@goimports -w .
 
-lint: golangci-lint-check
+lint: tools-check
 	@echo ">> checking gofmt"
 	@test -z "$$(gofmt -l .)" || (echo "❌ gofmt found unformatted files:" && gofmt -l . && exit 1)
 	@echo ">> checking goimports"
@@ -56,11 +56,15 @@ lint: golangci-lint-check
 	@echo ">> checking golangci-lint"
 	@golangci-lint run -E $(LINTERS)
 
-golangci-lint-check:
+tools-check:
 	@command -v golangci-lint >/dev/null 2>&1 || { \
 		echo ">> installing golangci-lint"; \
 		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest; \
 		sudo mv ./bin/golangci-lint /usr/local/bin/; \
+	}
+	@command -v goimports >/dev/null 2>&1 || { \
+		echo ">> installing goimports"; \
+		go install golang.org/x/tools/cmd/goimports@latest; \
 	}
 
 clean:

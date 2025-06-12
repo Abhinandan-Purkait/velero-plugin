@@ -19,9 +19,14 @@ jobs:
           go-version-file: 'go.mod'
         id: go
 
-      - name: Set Tag
+      - name: Set Image Tag
         run: |
-          TAG="${GITHUB_REF#refs/*/v}"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="${GITHUB_REF#refs/heads/}"
+          fi
+      
           echo "TAG=${TAG}" >> $GITHUB_ENV
           echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
 
