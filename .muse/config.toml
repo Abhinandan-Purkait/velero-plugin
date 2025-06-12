@@ -1,7 +1,0 @@
-ignoreRules = [ "G101",
-                "ST1005"
-              ]
-
-ignoreFiles = """
-vendor/**
-"""
